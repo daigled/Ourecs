@@ -1,0 +1,26 @@
+<h2>Artists</h2>
+<div id="artistForm">
+    <form [formGroup]="artistForm" (ngSubmit)="onSubmit()">
+        <label for="artistName">Artist Name: </label>
+        <input type="text" name="artistName" id="artistName" formControlName="artistName">
+        <button type="submit">Add Artist</button>
+    </form>
+</div>
+<div id="knownArtistList" *ngIf="knownArtists.length > 0">
+    <h3>Artists you like:</h3>
+    <ul>
+        <li *ngFor="let ka of knownArtists">{{ ka.name }}</li>
+    </ul>
+</div>
+<div id="recommendedArtistList" *ngIf="recommendedArtists.length > 0">
+    <h3>Artists you might want to check out:</h3>
+    <ul>
+        <li *ngFor="let ra of recommendedArtists">{{ ra.artist.name }} [{{ ra.weight }}]</li>
+    </ul>
+</div>
+<div id="artistTags" *ngIf="artistTags.length > 0">
+    <h3>tags:</h3>
+    <ul>
+        <li *ngFor="let tag of artistTags">{{  tag.name  }} [{{ tag.weight }}]</li>
+    </ul>
+</div>

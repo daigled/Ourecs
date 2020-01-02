@@ -5,10 +5,16 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ArtistsComponent } from './components/artists/artists.component';
+import { TagsComponent } from './components/tags/tags.component';
+import { AlbumsComponent } from './components/albums/albums.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ArtistsComponent,
+    TagsComponent,
+    AlbumsComponent
   ],
   imports: [
     BrowserModule,

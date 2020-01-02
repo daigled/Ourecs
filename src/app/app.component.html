@@ -1,6 +1,6 @@
 <div class="container">
   <div class="grid">
-    <div id="input-fields">
+    <!-- <div id="input-fields">
       <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
         <div class="input-container">
           <label for="artist">Artist:</label>
@@ -9,16 +9,13 @@
         <div class="input-container">
           <label for="album">Album:</label>
           <input type="text" name="album" id="album" formControlName="album">
-        </div>
-        <!-- <div class="input-container">
-          <label for="track">Track:</label>
-          <input type="text" name="track" id="track" formControlName="track">
-        </div> -->
+        </div>s
         <button type="submit">Get Data</button>
       </form>
-    </div>
+    </div> -->
     <div id="results-fields">
-      <div id="knownArtistList" *ngIf="knownArtists.length > 0">
+      <app-artists></app-artists>
+      <!-- <div id="knownArtistList" *ngIf="knownArtists.length > 0">
         <h3>Artists you like:</h3>
         <ul>
           <li *ngFor="let ka of knownArtists">{{ ka }}</li>
@@ -29,17 +26,16 @@
         <ul>
           <li *ngFor="let ra of recommendedArtists">{{ ra.name }} [{{ ra.weight }}]</li>
         </ul>
-      </div>
-      <div id="albumData" *ngIf="album">
-        <!-- <album [album]="album"></album> -->
+      </div> -->
+      <!-- <div id="albumData" *ngIf="album">
         <h3>{{ album.name }}</h3>
-      </div>
-      <div id="tagData" *ngIf="tags.length > 0">
+      </div> -->
+      <!-- <div id="tagData" *ngIf="tags.length > 0">
         <h3>Your Tags:</h3>
         <ul>
           <li *ngFor="let tag of tags" data-weight="tag.weight" >{{ tag.tag }} [{{ tag.weight }}]</li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
