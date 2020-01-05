@@ -43,6 +43,10 @@ export class ArtistsComponent implements OnInit {
 
   addNewKnownArtist(artist: Artist) {
 
+    if ( this.isRecommended(artist) ) {
+      this.removeRecommendedArtist(artist); // remove artist from list of recommendations once it is added to known artist list
+    }
+
     let alreadyKnown = false;
 
     this.knownArtists.forEach(ka => {
@@ -51,40 +55,51 @@ export class ArtistsComponent implements OnInit {
       }
     });
 
-    if ( this.isRecommended(artist) ) {
-      this.removeRecommendedArtist(artist); // remove artist from list of recommendations once it is added to known artist list
-    }
-
     if( !alreadyKnown ) {
       this.knownArtists.push(artist);
-      this.updateRecommendedArtists();
+      this.updateRecommendedArtists(artist.similar.artist);
     }
   }
 
-  updateRecommendedArtists() {
-    this.knownArtists.forEach(knownArtist => {
+  updateRecommendedArtists(newRecommendations: Artist[]) {
+    newRecommendations.forEach(newRec => {
 
-      knownArtist.similar.artist.forEach(similarArtist => {
-
-        if ( this.isRecommended(similarArtist) ) {
-          this.increaseRecommendation(similarArtist);
-        } else {
-          this.recommendedArtists.push({artist: similarArtist, weight: 1});
+      if ( this.isRecommended(newRec) ) {
+        this.increaseRecommendation(newRec);
+      } else {
+        if ( !this.isKnown(newRec) ) {
+          this.recommendedArtists.push({artist: newRec, weight: 1});
         }
-
-      });
+      }
 
     });
   }
 
-  isRecommended(artist: Artist ): boolean {
+  isRecommended(artist: Artist): boolean {
     let alreadyRecommended = false;
 
     this.recommendedArtists.forEach(rec => {
-      if ( rec.artist.name === artist.name ) alreadyRecommended = true;
+      if ( rec.artist.name === artist.name ) {
+        console.log(`${artist.name} is already a recommended artist`);
+        alreadyRecommended = true;
+      }
     })
 
     return alreadyRecommended;
+  }
+
+  isKnown(artist: Artist): boolean {
+    let known = false;
+
+    this.knownArtists.forEach(knownArtist => {
+
+      if(knownArtist.name === artist.name) {
+        console.log(`${artist.name} is already a known artist`);
+        known = true;
+      }
+    });
+
+    return known;
   }
 
   increaseRecommendation(artist: Artist) {
