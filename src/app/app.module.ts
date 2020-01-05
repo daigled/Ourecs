@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { ArtistsComponent } from './components/artists/artists.component';
 import { TagsComponent } from './components/tags/tags.component';
 import { AlbumsComponent } from './components/albums/albums.component';
+import { ArtistTileComponent } from './components/artists/artist-tile/artist-tile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArtistsComponent,
     TagsComponent,
-    AlbumsComponent
+    AlbumsComponent,
+    ArtistTileComponent
   ],
   imports: [
     BrowserModule,

@@ -30,88 +30,72 @@ export class ArtistsComponent implements OnInit {
   ngOnInit() {
   }
 
-  artistIsKnown(name: string): boolean {
-    this.knownArtists.forEach(artist => {
-      if ( artist.name === name ) return true;
-    });
-
-    return false;
-  }
-
-  artistIsAlreadyRecommended(name: string): boolean {
-    this.recommendedArtists.forEach(rec => {
-      if ( rec.artist.name === name ) return true;
-    });
-
-    return false;
-  }
-
-  increaseRecommendation(name: string) {
-    this.recommendedArtists.forEach(rec => {
-      if ( rec.artist.name === name ) rec.weight++;
-    });
-  }
-
-  updateKnownArtists(artist: Artist) {
-
-    this.knownArtists.push(artist);
-    if ( this.artistIsAlreadyRecommended(artist.name) ) {
-      this.recommendedArtists = this.recommendedArtists.filter(rec => {
-        return rec.artist.name !== artist.name
-      });
-    }
-    this.updateRecommendedArtists(artist.similar.artist);
-    // artist.similar.artist.forEach(artist => {
-    //   if( this.artistIsAlreadyRecommended(artist.name) ) {
-    //     this.increaseRecommendation(artist.name);
-    //   } else {
-    //     this.recommendedArtists.push({artist: artist, weight: 1});
-    //   }
-    // });
-
-  }
-
-  updateRecommendedArtists(artists: Artist[]) {
-    artists.forEach(artist => {
-      if( this.artistIsAlreadyRecommended(artist.name) ) {
-        this.increaseRecommendation(artist.name);
-      } else {
-        this.recommendedArtists.push({artist: artist, weight: 1});
-      }
-    });
-  }
-
-  updateTags(tags: any[]) {
-    tags.forEach(tag => {
-      if ( !this.artistTags.includes(tag.name) ) {
-        this.artistTags.push({name: tag.name, weight: 1})
-      }
-    })
-  }
-
-  updateRecommendationsBasedOnTags() {
-    this.artistTags.forEach(async tag => {
-      const limit = tag.weight * 3;
-      const topArtistsByTag = await this.artistService.getTopArtistsByTag(tag.name, limit+'');
-      console.log(`top artists by tag(${tag.name}): `, topArtistsByTag);
-
-      this.updateRecommendedArtists(topArtistsByTag.topartists.artist);
-    });
-  }
-
   async onSubmit() {
-    console.log('onSubmit() {')
 
     const { artistName } = this.artistForm.value;
 
     const artistInfo = await this.artistService.getInfo(artistName);
-    const artistTags = artistInfo.artist.tags.tag;
+    const artistTags = artistInfo.artist.tags;
 
-    this.updateKnownArtists(artistInfo.artist);
-    this.updateTags(artistTags);
-    this.updateRecommendationsBasedOnTags();
+    this.addNewKnownArtist(artistInfo.artist);
 
-    console.log('}// onSubmit')
   }// onSubmit
 
+  addNewKnownArtist(artist: Artist) {
+
+    let alreadyKnown = false;
+
+    this.knownArtists.forEach(ka => {
+      if ( ka.name === artist.name) {
+        alreadyKnown = true;
+      }
+    });
+
+    if ( this.isRecommended(artist) ) {
+      this.removeRecommendedArtist(artist); // remove artist from list of recommendations once it is added to known artist list
+    }
+
+    if( !alreadyKnown ) {
+      this.knownArtists.push(artist);
+      this.updateRecommendedArtists();
+    }
+  }
+
+  updateRecommendedArtists() {
+    this.knownArtists.forEach(knownArtist => {
+
+      knownArtist.similar.artist.forEach(similarArtist => {
+
+        if ( this.isRecommended(similarArtist) ) {
+          this.increaseRecommendation(similarArtist);
+        } else {
+          this.recommendedArtists.push({artist: similarArtist, weight: 1});
+        }
+
+      });
+
+    });
+  }
+
+  isRecommended(artist: Artist ): boolean {
+    let alreadyRecommended = false;
+
+    this.recommendedArtists.forEach(rec => {
+      if ( rec.artist.name === artist.name ) alreadyRecommended = true;
+    })
+
+    return alreadyRecommended;
+  }
+
+  increaseRecommendation(artist: Artist) {
+    this.recommendedArtists.forEach(rec => {
+      if ( rec.artist.name === artist.name ) rec.weight++;
+    })
+  }
+
+  removeRecommendedArtist(artist: Artist) {
+    this.recommendedArtists = this.recommendedArtists.filter(rec => {
+      return artist.name !== rec.artist.name;
+    })
+  }
 }
