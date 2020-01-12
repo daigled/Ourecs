@@ -43,7 +43,7 @@ export class ArtistsComponent implements OnInit {
 
   addNewKnownArtist(artist: Artist) {
 
-    if ( this.isRecommended(artist) ) {
+    if ( this.artistIsRecommended(artist) ) {
       this.removeRecommendedArtist(artist); // remove artist from list of recommendations once it is added to known artist list
     }
 
@@ -57,17 +57,28 @@ export class ArtistsComponent implements OnInit {
 
     if( !alreadyKnown ) {
       this.knownArtists.push(artist);
+      this.handleNewArtistTags(artist);
       this.updateRecommendedArtists(artist.similar.artist);
     }
+  }
+
+  handleNewArtistTags(artist: Artist) {
+    const newTags = artist.tags.tag;
+
+    newTags.forEach(tag => {
+      if ( !this.tagIsKnown(tag.name) ) {
+        this.artistTags.push({name: tag.name, weight: 1});
+      }
+    })
   }
 
   updateRecommendedArtists(newRecommendations: Artist[]) {
     newRecommendations.forEach(newRec => {
 
-      if ( this.isRecommended(newRec) ) {
+      if ( this.artistIsRecommended(newRec) ) {
         this.increaseRecommendation(newRec);
       } else {
-        if ( !this.isKnown(newRec) ) {
+        if ( !this.artistIsKnown(newRec) ) {
           this.recommendedArtists.push({artist: newRec, weight: 1});
         }
       }
@@ -75,12 +86,11 @@ export class ArtistsComponent implements OnInit {
     });
   }
 
-  isRecommended(artist: Artist): boolean {
+  artistIsRecommended(artist: Artist): boolean {
     let alreadyRecommended = false;
 
     this.recommendedArtists.forEach(rec => {
       if ( rec.artist.name === artist.name ) {
-        console.log(`${artist.name} is already a recommended artist`);
         alreadyRecommended = true;
       }
     })
@@ -88,13 +98,12 @@ export class ArtistsComponent implements OnInit {
     return alreadyRecommended;
   }
 
-  isKnown(artist: Artist): boolean {
+  artistIsKnown(artist: Artist): boolean {
     let known = false;
 
     this.knownArtists.forEach(knownArtist => {
 
       if(knownArtist.name === artist.name) {
-        console.log(`${artist.name} is already a known artist`);
         known = true;
       }
     });
@@ -112,5 +121,19 @@ export class ArtistsComponent implements OnInit {
     this.recommendedArtists = this.recommendedArtists.filter(rec => {
       return artist.name !== rec.artist.name;
     })
+  }
+
+  tagIsKnown(tag: string): boolean {
+    let result = false;
+
+
+    this.artistTags.forEach(aT => {
+      if ( aT.name === tag ) {
+        aT.weight++;
+        result = true;
+      }
+    });
+
+    return result;
   }
 }
