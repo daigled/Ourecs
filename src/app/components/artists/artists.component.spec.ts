@@ -22,4 +22,8 @@ describe('ArtistsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should add an artist', () => {
+    
+  })
 });

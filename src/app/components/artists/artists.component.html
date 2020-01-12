@@ -17,7 +17,7 @@
 <div id="recommendedArtistList" *ngIf="recommendedArtists.length > 0">
     <h3>Artists you might want to check out:</h3>
     <ul>
-        <li *ngFor="let ra of recommendedArtists">{{ ra.artist.name }} [{{ ra.weight }}]</li>
+        <li *ngFor="let ra of recommendedArtists" [id]="ra.artist.name">{{ ra.artist.name }} [{{ ra.weight }}]</li>
     </ul>
 
 </div>
