@@ -10,9 +10,16 @@
 </div>
 <div id="knownArtistList" *ngIf="knownArtists.length > 0">
     <h3>Artists you like:</h3>
-    <ul>
+    <!-- <ul>
         <li *ngFor="let ka of knownArtists">{{ ka.name }}</li>
-    </ul>
+    </ul> -->
+    <div class="grid">
+        <div class="artistTile" *ngFor="let ka of knownArtists">
+            <div class="tileInner">
+                <span class="artistName">{{ ka.name }}</span>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="recommendedArtistList" *ngIf="recommendedArtists.length > 0">
     <h3>Artists you might want to check out:</h3>

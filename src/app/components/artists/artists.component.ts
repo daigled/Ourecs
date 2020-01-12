@@ -41,7 +41,7 @@ export class ArtistsComponent implements OnInit {
 
   }// onSubmit
 
-  addNewKnownArtist(artist: Artist) {
+  async addNewKnownArtist(artist: Artist) {
 
     if ( this.artistIsRecommended(artist) ) {
       this.removeRecommendedArtist(artist); // remove artist from list of recommendations once it is added to known artist list
@@ -56,6 +56,20 @@ export class ArtistsComponent implements OnInit {
     });
 
     if( !alreadyKnown ) {
+
+      const topAlbums = await (await this.artistService.getTopAlbums(artist.name, "1")).topalbums
+      let albumMBIDs = []
+
+      console.log(`${artist.name}'s top Albums`)
+      console.log(topAlbums.album);
+
+      topAlbums.album.forEach(a => {
+        if( a.mbid ) { albumMBIDs.push(a.mbid); }
+      });
+
+      console.log('album MBIDs')
+      console.log(albumMBIDs)
+
       this.knownArtists.push(artist);
       this.handleNewArtistTags(artist);
       this.updateRecommendedArtists(artist.similar.artist);
