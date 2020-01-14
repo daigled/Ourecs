@@ -26,7 +26,7 @@ export class ArtistService {
     return this.http.get<{topartists: {artist: Artist[]}}>(`http://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=${tag}&api_key=${this.apiKey}&limit=${limit}&format=json`).toPromise();
   }
 
-  getTopAlbums(artist: string, limit: string): Promise<{topalbums: any[]}> {
-    return this.http.get<{topalbums: any[]}>(`http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${this.urlEscape(artist)}&api_key=${this.apiKey}&limit=${limit}&format=json`).toPromise();
+  getTopAlbums(artist: string, limit: string): Promise<{topalbums: {album: any[]} }> {
+    return this.http.get<{topalbums: {album: any[]} }>(`http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${this.urlEscape(artist)}&api_key=${this.apiKey}&limit=${limit}&format=json`).toPromise();
   }
 }

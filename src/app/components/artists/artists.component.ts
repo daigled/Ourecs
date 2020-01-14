@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ArtistService } from 'src/app/service/artist.service';
 import { Artist } from '../../model/artist';
+import { AlbumArtService } from 'src/app/service/album-art.service';
 
 @Component({
   selector: 'app-artists',
@@ -16,7 +17,10 @@ export class ArtistsComponent implements OnInit {
 
   artistForm: FormGroup;
 
-  constructor(private artistService: ArtistService) { 
+  constructor(
+    private artistService: ArtistService,
+    private albumArtService: AlbumArtService
+    ) { 
 
     this.knownArtists = [];
     this.recommendedArtists = [];
@@ -57,18 +61,21 @@ export class ArtistsComponent implements OnInit {
 
     if( !alreadyKnown ) {
 
-      const topAlbums = await (await this.artistService.getTopAlbums(artist.name, "1")).topalbums
-      let albumMBIDs = []
+      const topAlbums = await (await this.artistService.getTopAlbums(artist.name, "1")).topalbums.album[0]
+      // console.log(topAlbum)
+      // const mbid  = topAlbum.mbid
+      // this.albumArtService.getAlbumArt(mbid).then(res => console.log(res)).catch(err => console.error(err))
+      // let albumMBIDs = []
 
-      console.log(`${artist.name}'s top Albums`)
-      console.log(topAlbums.album);
+      // console.log(`${artist.name}'s top Albums`)
+      // console.log(topAlbums.album);
 
-      topAlbums.album.forEach(a => {
-        if( a.mbid ) { albumMBIDs.push(a.mbid); }
-      });
+      // topAlbums.album.forEach(a => {
+      //   if( a.mbid ) { albumMBIDs.push(a.mbid); }
+      // });
 
-      console.log('album MBIDs')
-      console.log(albumMBIDs)
+      // console.log('album MBIDs')
+      // console.log(albumMBIDs)
 
       this.knownArtists.push(artist);
       this.handleNewArtistTags(artist);
