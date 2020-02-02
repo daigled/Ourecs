@@ -61,21 +61,11 @@ export class ArtistsComponent implements OnInit {
 
     if( !alreadyKnown ) {
 
-      const topAlbums = await (await this.artistService.getTopAlbums(artist.name, "1")).topalbums.album[0]
-      // console.log(topAlbum)
-      // const mbid  = topAlbum.mbid
-      // this.albumArtService.getAlbumArt(mbid).then(res => console.log(res)).catch(err => console.error(err))
-      // let albumMBIDs = []
-
-      // console.log(`${artist.name}'s top Albums`)
-      // console.log(topAlbums.album);
-
-      // topAlbums.album.forEach(a => {
-      //   if( a.mbid ) { albumMBIDs.push(a.mbid); }
-      // });
-
-      // console.log('album MBIDs')
-      // console.log(albumMBIDs)
+      const topAlbums = await (await this.artistService.getTopAlbums(artist.name, "1")).topalbums
+      // console.log(topAlbums)
+      // console.log(topAlbums.album[0].image[2]["#text"])
+      const albumArtUrl = topAlbums.album[0].image[2]["#text"]
+      artist.image = albumArtUrl
 
       this.knownArtists.push(artist);
       this.handleNewArtistTags(artist);

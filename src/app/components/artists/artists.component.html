@@ -16,6 +16,7 @@
     <div class="grid">
         <div class="artistTile" *ngFor="let ka of knownArtists">
             <div class="tileInner">
+                <img attr.src={{ka.image}} alt="" class="album-art">
                 <span class="artistName">{{ ka.name }}</span>
             </div>
         </div>
