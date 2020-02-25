@@ -1,1 +1,21 @@
-<p>register works!</p>
+<form [formGroup]="registerForm" (submit)="onSubmit()">
+    <div class="input-container">
+        <label for="username">Username</label>
+        <input type="text" formControlName="username" id="username">
+    </div>
+    <div class="input-container">
+        <label for="password">Password</label>
+        <input type="password" formControlName="password" id="password">
+    </div>
+    <div class="input-container">
+        <label for="email">Email</label>
+        <input type="email" formControlName="email" id="email">
+    </div>
+    <div class="input-container">
+        <label for="phone">Phone</label>
+        <input type="phone" formControlName="phone" id="phone">
+    </div>
+    <div class="input-container">
+        <button class="btn" type="submit">Register</button>
+    </div>
+</form>

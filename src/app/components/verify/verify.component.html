@@ -1,1 +1,9 @@
-<p>verify works!</p>
+<form [formGroup]="verifyForm" (submit)="onSubmit()">
+    <div class="input-container">
+        <label for="code">code</label>
+        <input type="text" formControlName="code" id="code">
+    </div>
+    <div class="input-container">
+        <button class="btn" type="submit">Verify</button>
+    </div>
+</form>
