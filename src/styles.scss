@@ -1,6 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-$charcoal: #36454f;
-$raleway: 'Raleway', sans-serif;
+@import '../src/assets/variables';
 
 *, *:before, *:after {
     box-sizing: border-box;
