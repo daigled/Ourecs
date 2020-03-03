@@ -5,33 +5,20 @@
             <label for="artistName">Artist Name</label>
             <input type="text" name="artistName" id="artistName" formControlName="artistName">
         </div>
-        <button class="btn" type="submit">Add Artist</button>
-    </form>
-</div>
-<div id="knownArtistList" *ngIf="knownArtists.length > 0">
-    <h3>Artists you like:</h3>
-    <!-- <ul>
-        <li *ngFor="let ka of knownArtists">{{ ka.name }}</li>
-    </ul> -->
-    <div class="grid">
-        <div class="artistTile" *ngFor="let ka of knownArtists">
-            <div class="tileInner">
-                <img attr.src={{ka.image}} alt="" class="album-art">
-                <span class="artistName">{{ ka.name }}</span>
+        <form [formGroup]="artistTagsForm">
+            <div class="input-container" *ngFor="let i of tagRange">
+                <label>Tag {{i}}</label>
+                <input class="tagInput" type="text" id={{i}} formControlName="{{i}}">
             </div>
-        </div>
-    </div>
-</div>
-<div id="recommendedArtistList" *ngIf="recommendedArtists.length > 0">
-    <h3>Artists you might want to check out:</h3>
-    <ul>
-        <li *ngFor="let ra of recommendedArtists" [id]="ra.artist.name">{{ ra.artist.name }} [{{ ra.weight }}]</li>
-    </ul>
-
-</div>
-<div id="artistTags" *ngIf="artistTags.length > 0">
-    <h3>tags:</h3>
-    <ul>
-        <li *ngFor="let tag of artistTags">{{  tag.name  }} [{{ tag.weight }}]</li>
-    </ul>
+            <button class="btn" (click)="addTagInput()">Add Tag</button>
+        </form>
+        <form [formGroup]="artistAlbumsForm">
+            <div class="input-container" *ngFor="let j of albumRange">
+                <label>Album {{j}}</label>
+                <input class="tagInput" type="text" id={{j}} formControlName="{{j}}">
+            </div>
+            <button class="btn" (click)="addAlbumInput()">Add Album</button>
+        </form>
+        <button class="btn" type="submit" #tref>Add Artist</button>
+    </form>
 </div>

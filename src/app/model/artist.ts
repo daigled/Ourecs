@@ -2,25 +2,16 @@ import { stringify } from 'querystring';
 
 export class Artist {
     name: string;
-    url: string;
-    image: string;
-
-    similar?: {artist: Artist[]};
-    tags?: {tag: {name: string, url: string}[]};
+    albums: string[];
+    tags: string[];
 
     constructor (
         name: string,
-        url: string,
-        image: string,
-
-        similar?: {artist: Artist[]},
-        tags?: {tag: {name: string, url: string}[]}
+        albums?: string[],
+        tags?: string[]
     ) {
         this.name = name;
-        this.url = url;
-        this.image = image;
-
-        this.similar = similar ? similar : {artist: []};
-        this.tags = tags ? tags : {tag: []};
+        this.albums = albums ? albums : [];
+        this.tags = tags ? tags : [];
     }
 }

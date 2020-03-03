@@ -9,12 +9,16 @@ import { ArtistsComponent } from './components/artists/artists.component';
 import { TagsComponent } from './components/tags/tags.component';
 import { AlbumsComponent } from './components/albums/albums.component';
 
+import { fakeBackendProvider } from './_helpers';
+import { LoginComponent } from './components/login/login.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     ArtistsComponent,
     TagsComponent,
-    AlbumsComponent
+    AlbumsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +27,7 @@ import { AlbumsComponent } from './components/albums/albums.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [fakeBackendProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

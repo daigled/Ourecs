@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ArtistService } from 'src/app/service/artist.service';
+import { ArtistService } from 'src/app/_services/artist.service';
 import { Artist } from '../../model/artist';
-import { AlbumArtService } from 'src/app/service/album-art.service';
+import { AlbumArtService } from 'src/app/_services/album-art.service';
 
 @Component({
   selector: 'app-artists',
@@ -11,140 +11,56 @@ import { AlbumArtService } from 'src/app/service/album-art.service';
 })
 export class ArtistsComponent implements OnInit {
 
-  knownArtists: Artist[];
-  recommendedArtists: {artist: Artist; weight: number}[];
-  artistTags: {name: string; weight: number}[];
-
   artistForm: FormGroup;
+  artistTagsForm: FormGroup;
+  artistAlbumsForm: FormGroup;
+
+  tagRange: number[];
+  // tagCount: number;
+
+  albumRange: number[];
+  // albumCount: number;
 
   constructor(
     private artistService: ArtistService,
     private albumArtService: AlbumArtService
     ) { 
 
-    this.knownArtists = [];
-    this.recommendedArtists = [];
-    this.artistTags = [];
+    this.artistTagsForm = new FormGroup({});
+    this.artistAlbumsForm = new FormGroup({});
 
     this.artistForm = new FormGroup({
-      artistName: new FormControl('')
+      artistName: new FormControl(''),
+      tags: this.artistTagsForm,
+      albums: this.artistAlbumsForm
     });
+
+    this.tagRange = [];
+    this.albumRange = [];
   }
 
   ngOnInit() {
   }
 
-  async onSubmit() {
+  onSubmit() {
 
     const { artistName } = this.artistForm.value;
+    const artistTags = Object.values(this.artistTagsForm.value) as string[];
+    const artistAlbums = Object.values(this.artistAlbumsForm.value) as string[];
 
-    const artistInfo = await this.artistService.getInfo(artistName);
-    const artistTags = artistInfo.artist.tags;
-
-    this.addNewKnownArtist(artistInfo.artist);
-
+    this.artistService.addArtist(new Artist(artistName, artistAlbums, artistTags))
+      .then(res => console.log(res))
+      .catch(err => console.error(err))
   }// onSubmit
 
-  async addNewKnownArtist(artist: Artist) {
-
-    if ( this.artistIsRecommended(artist) ) {
-      this.removeRecommendedArtist(artist); // remove artist from list of recommendations once it is added to known artist list
-    }
-
-    let alreadyKnown = false;
-
-    this.knownArtists.forEach(ka => {
-      if ( ka.name === artist.name) {
-        alreadyKnown = true;
-      }
-    });
-
-    if( !alreadyKnown ) {
-
-      const topAlbums = await (await this.artistService.getTopAlbums(artist.name, "1")).topalbums
-      // console.log(topAlbums)
-      // console.log(topAlbums.album[0].image[2]["#text"])
-      const albumArtUrl = topAlbums.album[0].image[2]["#text"]
-      artist.image = albumArtUrl
-
-      this.knownArtists.push(artist);
-      this.handleNewArtistTags(artist);
-      this.updateRecommendedArtists(artist.similar.artist);
-    }
+  addTagInput() {
+    this.tagRange.push(this.tagRange.length);
+    this.artistTagsForm.addControl(""+(this.tagRange.length-1), new FormControl(''));
   }
 
-  handleNewArtistTags(artist: Artist) {
-    const newTags = artist.tags.tag;
-
-    newTags.forEach(tag => {
-      if ( !this.tagIsKnown(tag.name) ) {
-        this.artistTags.push({name: tag.name, weight: 1});
-      }
-    })
+  addAlbumInput() {
+    this.albumRange.push(this.albumRange.length);
+    this.artistAlbumsForm.addControl(""+(this.albumRange.length-1), new FormControl(''));
   }
 
-  updateRecommendedArtists(newRecommendations: Artist[]) {
-    newRecommendations.forEach(newRec => {
-
-      if ( this.artistIsRecommended(newRec) ) {
-        this.increaseRecommendation(newRec);
-      } else {
-        if ( !this.artistIsKnown(newRec) ) {
-          this.recommendedArtists.push({artist: newRec, weight: 1});
-        }
-      }
-
-    });
-  }
-
-  artistIsRecommended(artist: Artist): boolean {
-    let alreadyRecommended = false;
-
-    this.recommendedArtists.forEach(rec => {
-      if ( rec.artist.name === artist.name ) {
-        alreadyRecommended = true;
-      }
-    })
-
-    return alreadyRecommended;
-  }
-
-  artistIsKnown(artist: Artist): boolean {
-    let known = false;
-
-    this.knownArtists.forEach(knownArtist => {
-
-      if(knownArtist.name === artist.name) {
-        known = true;
-      }
-    });
-
-    return known;
-  }
-
-  increaseRecommendation(artist: Artist) {
-    this.recommendedArtists.forEach(rec => {
-      if ( rec.artist.name === artist.name ) rec.weight++;
-    })
-  }
-
-  removeRecommendedArtist(artist: Artist) {
-    this.recommendedArtists = this.recommendedArtists.filter(rec => {
-      return artist.name !== rec.artist.name;
-    })
-  }
-
-  tagIsKnown(tag: string): boolean {
-    let result = false;
-
-
-    this.artistTags.forEach(aT => {
-      if ( aT.name === tag ) {
-        aT.weight++;
-        result = true;
-      }
-    });
-
-    return result;
-  }
 }

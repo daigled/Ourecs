@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  apiKey: "b8984a19585f4f91dc27fb515765f8d7",
-  sharedSecret: "33923aa1b4fe81f39a1cb472af8a7d47"
+  apiKey: "2y6iOEoRmN2sno5U0MwoD60VuyCMzvcg2hSdNDRZ",
+  sharedSecret: "33923aa1b4fe81f39a1cb472af8a7d47",
+  apiUrl: "https://azuzcf5db8.execute-api.us-east-1.amazonaws.com/test"
 };
 
 /*
